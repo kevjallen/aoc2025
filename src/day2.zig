@@ -73,8 +73,8 @@ pub fn solve(input: []const u8) !void {
         const end_id = try std.fmt.parseInt(usize, strip(end_id_str), 10);
 
         for (start_id..end_id) |id| {
-            var buffer: [20]u8 = undefined;
-            const id_str = try std.fmt.bufPrint(&buffer, "{}", .{id});
+            var buf: [20]u8 = undefined;
+            const id_str = try std.fmt.bufPrint(&buf, "{}", .{id});
 
             if (validateId(id_str) == false) {
                 counter += id;
