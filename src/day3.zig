@@ -40,7 +40,7 @@ fn calculateJoltageV2(bank: []const u8) !usize {
 
     var result: usize = 0;
     for (0..12) |i| {
-        result += buf[i] * std.math.pow(usize, 10, i);
+        result = 10 * result + buf[buf.len - 1 - i];
     }
     return result;
 }
