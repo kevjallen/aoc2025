@@ -1,6 +1,6 @@
 const std = @import("std");
 
-pub const SecurityDial = struct {
+const SecurityDial = struct {
     current_pos: u8 = 50,
 
     pub const dialSize: u8 = 100;
