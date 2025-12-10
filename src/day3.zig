@@ -8,6 +8,7 @@ fn calculateJoltage(bank: []const u8) !usize {
         const n = ch - '0';
 
         if (ones > tens) {
+            // shift larger value to tens place
             tens = ones;
             ones = 1;
         }
@@ -28,7 +29,7 @@ fn calculateJoltageV2(bank: []const u8) !usize {
         var i: usize = buf.len - 1;
         while (i > 0) : (i -= 1) {
             if (buf[i] < buf[i - 1]) {
-                // shift larger values to the right
+                // shift larger value to next position
                 std.mem.copyBackwards(u8, buf[1..i + 1], buf[0..i]);
                 buf[0] = 1;
                 break;
