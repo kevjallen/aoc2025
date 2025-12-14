@@ -2,6 +2,7 @@ const std = @import("std");
 const day1 = @import("day1.zig");
 const day2 = @import("day2.zig");
 const day3 = @import("day3.zig");
+const day4= @import("day4.zig");
 
 pub fn main() !void {
     var gpa = std.heap.GeneralPurposeAllocator(.{}){};
@@ -27,6 +28,7 @@ pub fn main() !void {
         1 => try day1.solve(input),
         2 => try day2.solve(input),
         3 => try day3.solve(input),
+        4 => try day4.solve(input),
         else => {
             std.debug.print("Day {} not implemented yet.\n", .{day});
         }
