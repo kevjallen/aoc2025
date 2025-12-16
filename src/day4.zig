@@ -88,10 +88,7 @@ pub fn solve(input: []const u8) !void {
 
     // load input into extractor pipeline
     while (iter.next()) |line| {
-        const row = try allocator.alloc(u8, line.len);
-        @memcpy(row[0..line.len], line);
-
-        var result = try extractors[0].addRow(row);
+        var result = try extractors[0].addRow(line);
 
         var extractor_idx: usize = 1;
         while (result.len > 0 and extractor_idx < extractors.len) {
