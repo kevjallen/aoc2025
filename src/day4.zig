@@ -3,9 +3,9 @@ const std = @import("std");
 const RollExtractor = struct {
     count: usize = 0,
 
-    top: []const u8 = &[_]u8{},
-    mid: []const u8 = &[_]u8{},
-    bot: []const u8 = &[_]u8{},
+    top: []u8 = &[_]u8{},
+    mid: []u8 = &[_]u8{},
+    bot: []u8 = &[_]u8{},
 
     bot_count: usize = 0,
     extract_buf: [1024]u8 = undefined,
@@ -17,9 +17,30 @@ const RollExtractor = struct {
         };
     }
 
+    pub fn deinit(self: *RollExtractor) void {
+        if (self.top.len > 0) {
+            self.allocator.free(self.top);
+        }
+        if (self.mid.len > 0) {
+            self.allocator.free(self.mid);
+        }
+        if (self.bot.len > 0) {
+            self.allocator.free(self.bot);
+        }
+    }
+
     pub fn addRow(self: *RollExtractor, row: []const u8) ![]const u8 {
-        const copy = try self.allocator.alloc(u8, row.len);
-        @memcpy(copy[0..row.len], row);
+        var copy: []u8 = undefined;
+        if (row.len > 0) {
+            copy = try self.allocator.alloc(u8, row.len);
+            @memcpy(copy, row);
+        } else {
+            copy = &[_]u8{};
+        }
+
+        if (self.top.len > 0) {
+            self.allocator.free(self.top);
+        }
 
         self.top = self.mid;
         self.mid = self.bot;
@@ -82,7 +103,13 @@ pub fn solve(input: []const u8) !void {
 
     const allocator = arena_allocator.allocator();
 
-    var extractors: [1024]RollExtractor = @splat(RollExtractor.init(allocator));
+    var extractors: [256]RollExtractor = undefined;
+    for (&extractors) |*e| {
+        e.* = RollExtractor.init(allocator);
+    }
+    defer for (&extractors) |*e| {
+        e.deinit();
+    };
 
     var iter = std.mem.tokenizeScalar(u8, input, '\n');
 
