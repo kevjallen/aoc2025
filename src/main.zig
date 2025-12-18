@@ -2,11 +2,17 @@ const std = @import("std");
 const day1 = @import("day1.zig");
 const day2 = @import("day2.zig");
 const day3 = @import("day3.zig");
-const day4= @import("day4.zig");
+const day4 = @import("day4.zig");
+const day5 = @import("day5.zig");
 
 pub fn main() !void {
-    var gpa = std.heap.GeneralPurposeAllocator(.{}){};
-    const allocator = gpa.allocator();
+    var arena_allocator = std.heap.ArenaAllocator.init(std.heap.page_allocator);
+    defer arena_allocator.deinit();
+    // var gpa = std.heap.GeneralPurposeAllocator(.{}){};
+    // defer _ = gpa.deinit();
+
+    const allocator = arena_allocator.allocator();
+    // const allocator = gpa.allocator();
 
     const args = try std.process.argsAlloc(allocator);
     defer std.process.argsFree(allocator, args);
@@ -29,6 +35,7 @@ pub fn main() !void {
         2 => try day2.solve(input),
         3 => try day3.solve(input),
         4 => try day4.solve(input),
+        5 => try day5.solve(input),
         else => {
             std.debug.print("Day {} not implemented yet.\n", .{day});
         }
